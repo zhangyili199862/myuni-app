@@ -1,0 +1,88 @@
+<template>
+	<list style="width: 520rpx;height: 500rpx;" :show-scrollbar="false" :bounce="false">
+		<cell class="flex align-center px-3 pt-3" insert-animation="default" delete-animation="default"
+			v-for="(item,index) in gifts" :key="index" :ref="'item'+index">
+			<view class="flex rounded-circle gift-item">
+				<view class="p">
+					<image :src="item.avatar ||defaultAvatar" class="rounded-circle iconWH"></image>
+				</view>
+				<view class="flex-1 flex flex-column justify-center">
+					<text class="text-white font">{{item.username}}</text>
+					<text class="text-warning font-sm">{{item.gift_name}}</text>
+				</view>
+				<view class="p">
+					<image :src="item.gift_image" class="rounded-circle iconWH"></image>
+				</view>
+			</view>
+			<text class="text-warning font-lg ml-1"> X {{item.num}}</text>
+		</cell>
+	</list>
+	<!-- <scroll-view scroll-y="true" >
+		<view class="flex align-center">
+			<view class="flex rounded-circle gift-item">
+				<view class="p">
+					<image src="../../static/demo/1.jpg" class="rounded-circle iconWH"></image>
+				</view>
+				<view class="flex-1 flex flex-column justify-center">
+					<text class="text-white font">昵称</text>
+					<text class="text-warning font-sm">送礼物</text>
+				</view>
+				<view class="p">
+					<image src="../../static/gift/3.png" class="rounded-circle iconWH"></image>
+				</view>
+			</view>
+			<text class="text-warning font-lg ml-1"> X 10</text>
+		</view>
+	</scroll-view> -->
+</template>
+
+<script>
+	const domModule = weex.requireModule('dom');
+	export default {
+		data() {
+			return {
+				defaultAvatar: "/static/tabbar/min.png",
+				gifts: []
+			}
+		},
+		created() {
+		},
+		methods: {
+			send(gift) {
+				this.gifts.push(gift);
+				this.toBottom();
+				this.autoHide();
+			},
+			//置于底部
+			toBottom() {
+				this.$nextTick(() => {
+					let index = this.gifts.length - 1;
+					let ref = 'item' + index;
+					if (this.$refs[ref]) {
+						domModule.scrollToElement(this.$refs[ref][0], {})
+					}
+				})
+			},
+			//自动消失
+			autoHide() {
+				if (this.gifts.length) {
+					let timer = setTimeout(() => {
+						this.gifts.splice(0, 1)
+					}, 5000)
+				}
+			}
+		}
+	}
+</script>
+
+<style>
+	.gift-item {
+		width: 325rpx;
+		background-image: linear-gradient(to right, #BCABB1, #65AAF0);
+	}
+
+	.iconWH {
+		width: 70rpx;
+		height: 70rpx;
+	}
+</style>
