@@ -1,0 +1,174 @@
+<template>
+	<view>
+		<live-pusher id='livePusher' ref="livePusher" class="livePusher" :url="url" :mode="mode"
+			:enable-camera="enableCamera" :auto-focus="true" :device-position="position" :beauty="beauty"
+			:whiteness="whiteness" aspect="9:16" @statechange="statechange" @netstatus="netstatus" @error="error"
+			:style="'height: '+windowHeight+'px;'" style="width: 750rpx;"></live-pusher>
+		<view style="position: fixed;left: 0;right: 0;height: 500rpx;" :style="'top:'+statusBarHeight">
+			<view class="flex justify-center align-center" style="width: 90rpx;height: 90rpx;">
+				<text class="iconfont text-white">&#xe607;</text>
+			</view>
+			<view class="position-absolute rounded p-2 flex align-center"
+				style="left: 90rpx;right: 100rpx;height: 160rpx;background-color: rgba(0,0,0,0.2);">
+				<view style="height: 120rpx;width: 120rpx;" class="position-relative">
+					<image src="../../static/gift/4.png" class="position-relative rounded"
+						style="width: 120rpx;height: 120rpx;"></image>
+					<text class="text-white position-absolute font" style="left: 0;right: 0;bottom: 0;">更换封面</text>
+				</view>
+				<view class="flex-1">
+					<input type="text" value="" placeholder="请输入直播标题" class="mb-2" />
+					<text class="text-white font">#请选择分类</text>
+				</view>
+			</view>
+			<view class="position-absolute right-0 flex flex-column" style="width: 100rpx;">
+				<view style="height: 120rpx;width: 100rpx;" class="flex flex-column align-center justify-center"
+					@click="switchCamera">
+					<text class="iconfont text-white mb-1">&#xe605;</text>
+					<text class="text-white font">翻转</text>
+				</view>
+				<view style="height: 120rpx;width: 100rpx;" class="flex flex-column align-center justify-cente"
+					@click="openPopup('mode')">
+					<text class="iconfont text-white mb-1">&#xe60c;</text>
+					<text class="text-white font">画质</text>
+				</view>
+				<view style="height: 120rpx;width: 100rpx;" class="flex flex-column align-center justify-center"
+					@click="openPopup('beauty')">
+					<text class="iconfont text-white mb-1">&#xe632;</text>
+					<text class="text-white font">美颜</text>
+				</view>
+				<view style="height: 120rpx;width: 100rpx;" class="flex flex-column align-center justify-center"
+					@click="openPopup('whiteness')">
+					<text class="iconfont text-white mb-1">&#xe631;</text>
+					<text class="text-white font">美白</text>
+				</view>
+			</view>
+		</view>
+		<view class="position-fixed bg-main flex align-center justify-center rounded-circle"
+			style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;">
+			<text class="text-white font-sm">开启视频直播</text>
+		</view>
+		<uni-popup type="bottom" ref="popup">
+			<view class="bg-white">
+				<view class="flex justify-center align-center border-bottom" style="height: 90rpx;">
+					<text class="font-md">提示</text>
+				</view>
+				<!-- 画质选择 -->
+				<view v-if="popUpType==='mode'">
+					<view class="flex align-center justify-center py-3" v-for="(item,index) in modelList" :key="index"
+						:class="mode === item.type?'bg-main':''" @click="chooseMode(item.type)">
+						<text class="font-md" :class="mode===item.type?'text-white':''">{{item.desc}}</text>
+					</view>
+				</view>
+				<!-- 美颜 -->
+				<view v-else-if="popUpType ==='beauty'" class="px-1">
+					<slider :min="0" :max="9" :step="1" :value="beauty" show-value :block-size="18" @change="handleSilderChange"></slider>
+				</view>
+				<!-- 美白 -->
+				<view v-else class="px-1">
+					<slider :min="0" :max="9" :step="1" :value="whiteness" show-value :block-size="18" @change="handleSilderChange"></slider>
+				</view>
+				<view class="f-divider"></view>
+				<view class="flex justify-center align-center" style="height: 90rpx;" @click="closePopup">取消</view>
+			</view>
+		</uni-popup>
+	</view>
+</template>
+
+<script>
+	import uniPopup from '@/components/uni-ui/uni-popup/uni-popup.vue'
+	export default {
+		components: {
+			uniPopup
+		},
+		data() {
+			return {
+				url: "",
+				mode: "SD",
+				enableCamera: true,
+				position: "back",
+				beauty: 0,
+				whiteness: 0,
+				windowHeight: 0,
+				context: null,
+				statusBarHeight: 0,
+				modelList: [{
+						type: "SD",
+						desc: "标清"
+					},
+					{
+						type: "HD",
+						desc: "高清"
+					},
+					{
+						type: "FHD",
+						desc: "超清"
+					}
+				],
+				popUpType:'mode'
+			}
+		},
+		onLoad() {
+			let res = uni.getSystemInfoSync();
+			this.windowHeight = res.windowHeight;
+			this.statusBarHeight = res.statusBarHeight;
+		},
+		onReady() {
+			this.context = uni.createLivePusherContext('livePusher', this)
+			this.startPreview()
+		},
+		methods: {
+			// 开启预览
+			startPreview() {
+				this.context.startPreview({
+					success: (e) => {
+						console.log(e);
+					}
+				})
+			},
+			// 直播状态变化
+			statechange(e) {
+				console.log(e);
+			},
+			// 直播网络变化
+			netstatus(e) {
+				console.log(e);
+			},
+			error(e) {
+				console.log(e);
+			},
+			//切换摄像头
+			switchCamera() {
+				this.context.switchCamera({
+					success: (e) => {
+						this.position = this.position === 'back' ? 'front' : 'back'
+					}
+				})
+			},
+			//切换画质
+			openPopup(type) {
+				this.popUpType = type;
+				this.$refs.popup.open();
+			},
+			closePopup() {
+				this.$refs.popup.close();
+			},
+			//选择画质
+			chooseMode(item) {
+				this.mode = item;
+				uni.showToast({
+					title: `切换画质成功`,
+					icon: "none"
+				})
+				this.closePopup();
+			},
+			//切换美颜等级
+			handleSilderChange(e){
+				this[this.popUpType] = e.detail.value;
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>

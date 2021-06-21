@@ -13,71 +13,62 @@
 					}
 				}
 			}
-		}, {
-			"path": "pages/my/my",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
 		}
+	    ,{
+            "path" : "pages/my/my",
+            "style" : {}
+        }
         ,{
             "path" : "pages/live/live",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
+            "style" : {
 				"app-plus":{
 					"titleNView":false
 				}
-            }
-            
+			}
         }
         ,{
-            "path" : "component/live/f-gift",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
+            "path" : "pages/coin/coin",
+            "style" : {
+				"navigationBarTitleText":"我的余额",
+				"navigationBarBackgroundColor":"#FFFFFF",
+				"navigationBarTextStyle": "black"
+			}
         }
         ,{
-            "path" : "component/live/f-danmu",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
+            "path" : "pages/create-live/create-live",
+            "style" : {
+				"app-plus":{
+					"titleNView":false
+				}
+			}
         }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "例会直播",
+		"navigationBarTitleText": "帝莎直播",
 		"navigationBarBackgroundColor": "#8745FF",
 		"backgroundColor": "#8745FF"
 	},
-	"tabBar": {
-		"color": "#707070",
-		"selectedColor": "#8745FF",
-		"backgroundColor": "#FFFFFF",
-		"borderStyle": "black",
-		"midButton": {
-			"iconPath": "static/tabbar/min.png",
-			"iconWidth": "60px",
-			"height": "65px"
+	"tabBar":{
+		"color":"#707070",
+		"selectedColor":"#8745FF",
+		"backgroundColor":"#FFFFFF",
+		"borderStyle":"black",
+		"midButton":{
+			"iconPath":"static/tabbar/min.png",
+			"iconWidth":"60px",
+			"height":"65px"
 		},
-		"list": [{
-			"text": "发现",
-			"iconPath": "./static/tabbar/find.png",
-			"selectedIconPath": "static/tabbar/find-selected.png",
-			"pagePath": "pages/index/index"
+		"list":[{
+			"iconPath":"./static/tabbar/find.png",
+			"selectedIconPath":"static/tabbar/find-selected.png",
+			"pagePath":"pages/index/index",
+			"text":"发现"
 		},{
-			"text": "我的",
-			"iconPath": "static/tabbar/my.png",
-			"selectedIconPath": "static/tabbar/my-selected.png",
-			"pagePath": "pages/my/my"
+			"iconPath":"static/tabbar/my.png",
+			"selectedIconPath":"static/tabbar/my-selected.png",
+			"pagePath":"pages/my/my",
+			"text":"我的"
 		}]
 	}
 }
