@@ -45,7 +45,7 @@
 				</view>
 			</view>
 			<view class="position-fixed bg-main flex align-center justify-center rounded-circle"
-				style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;">
+				style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;" @click="openLiveRoom">
 				<text class="text-white font-sm">开启视频直播</text>
 			</view>
 			<uni-popup type="bottom" ref="popup">
@@ -55,18 +55,20 @@
 					</view>
 					<!-- 画质选择 -->
 					<view v-if="popUpType==='mode'">
-						<view class="flex align-center justify-center py-3" v-for="(item,index) in modelList" :key="index"
-							:class="mode === item.type?'bg-main':''" @click="chooseMode(item.type)">
+						<view class="flex align-center justify-center py-3" v-for="(item,index) in modelList"
+							:key="index" :class="mode === item.type?'bg-main':''" @click="chooseMode(item.type)">
 							<text class="font-md" :class="mode===item.type?'text-white':''">{{item.desc}}</text>
 						</view>
 					</view>
 					<!-- 美颜 -->
 					<view v-else-if="popUpType ==='beauty'" class="px-1">
-						<slider :min="0" :max="9" :step="1" :value="beauty" show-value :block-size="18" @change="handleSilderChange"></slider>
+						<slider :min="0" :max="9" :step="1" :value="beauty" show-value :block-size="18"
+							@change="handleSilderChange"></slider>
 					</view>
 					<!-- 美白 -->
 					<view v-else class="px-1">
-						<slider :min="0" :max="9" :step="1" :value="whiteness" show-value :block-size="18" @change="handleSilderChange"></slider>
+						<slider :min="0" :max="9" :step="1" :value="whiteness" show-value :block-size="18"
+							@change="handleSilderChange"></slider>
 					</view>
 					<view class="f-divider"></view>
 					<view class="flex justify-center align-center" style="height: 90rpx;" @click="closePopup">取消</view>
@@ -82,12 +84,12 @@
 		components: {
 			uniPopup
 		},
-		computed:{
-			popupTitle(){
+		computed: {
+			popupTitle() {
 				let o = {
-					mode:'画质',
-					beauty:'美颜',
-					whiteness:'美白'
+					mode: '画质',
+					beauty: '美颜',
+					whiteness: '美白'
 				}
 				return o[this.popUpType];
 			}
@@ -116,8 +118,8 @@
 						desc: "超清"
 					}
 				],
-				popUpType:'mode',
-				showTheBars:true
+				popUpType: 'mode',
+				showTheBars: true
 			}
 		},
 		onLoad() {
@@ -129,7 +131,7 @@
 			this.context = uni.createLivePusherContext('livePusher', this)
 			this.startPreview()
 		},
-		onBackPress(){
+		onBackPress() {
 			this.showTheBars = false
 		},
 		methods: {
@@ -178,8 +180,26 @@
 				this.closePopup();
 			},
 			//切换美颜等级
-			handleSilderChange(e){
+			handleSilderChange(e) {
 				this[this.popUpType] = e.detail.value;
+			},
+			//前往直播页面
+			openLiveRoom() {
+				const {
+					mode,
+					position,
+					beauty,
+					whiteness
+				} = this;
+				uni.navigateTo({
+					url: '../liveroom/liveroom?options=' + JSON.stringify({
+						mode,
+						position,
+						beauty,
+						whiteness
+					}),
+
+				})
 			}
 		}
 	}

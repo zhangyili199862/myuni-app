@@ -51,10 +51,19 @@
             }
             
         }
+        ,{
+            "path" : "components/common/f-list-item",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "帝莎直播",
+		"navigationBarTitleText": "例会直播",
 		"navigationBarBackgroundColor": "#8745FF",
 		"backgroundColor": "#8745FF"
 	},
